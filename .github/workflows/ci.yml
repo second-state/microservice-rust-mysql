@@ -65,9 +65,18 @@ jobs:
         
     - name: Test the service
       run: |
+        echo "Running init"
         curl http://localhost:8080/init
+        sleep 5
+        echo "Running create orders"
         curl http://localhost:8080/create_orders -X POST -d @orders.json
+        sleep 5
+        echo "Running orders"
         curl http://localhost:8080/orders
+        sleep 5
+        echo "Running delete order"
         curl http://localhost:8080/delete_order?order_id=2
+        sleep 5
+        echo "Running orders"
         curl http://localhost:8080/orders
         kill -9 `cat wasmedge.pid`
