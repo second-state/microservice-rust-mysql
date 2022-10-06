@@ -55,7 +55,7 @@ jobs:
         VERSION=0.11.1
         curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/install.sh | sudo bash -s -- --version=$VERSION -p /usr/local
 
-    - name: Run the microservice
+    - name: Run the microservice on MySQL
       run: |
         cargo build --target wasm32-wasi --release
         wasmedgec target/wasm32-wasi/release/order_demo_service.wasm order_demo_service.wasm
@@ -87,3 +87,37 @@ jobs:
         curl http://localhost:8080/orders
         echo $'\nDone!'
         kill -9 `cat wasmedge.pid`
+        rm wasmedge.pid
+
+    - name: Run the microservice on TiDB
+      run: |
+        nohup wasmedge --env "DATABASE_URL=root@127.0.0.1:4000/mysql" order_demo_service.wasm &
+        echo $! > wasmedge.pid
+        sleep 15
+
+    - name: Test the service
+      run: |
+        echo $'\nRunning init'
+        curl http://localhost:8080/init
+        sleep 5
+        echo $'\nRunning create orders'
+        curl http://localhost:8080/create_orders -X POST -d @orders.json
+        sleep 5
+        echo $'\nRunning orders'
+        curl http://localhost:8080/orders
+        sleep 5
+        echo $'\nRunning delete order'
+        curl http://localhost:8080/delete_order?id=2
+        sleep 5
+        echo $'\nRunning orders'
+        curl http://localhost:8080/orders
+        sleep 5
+        echo $'\nRunning update order'
+        curl http://localhost:8080/update_order -X POST -d @update_order.json
+        sleep 5
+        echo $'\nRunning orders'
+        curl http://localhost:8080/orders
+        echo $'\nDone!'
+        kill -9 `cat wasmedge.pid`
+        rm wasmedge.pid
+
