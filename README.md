@@ -62,13 +62,13 @@ curl http://localhost:8080/orders
 When the microservice receives a POST request to the `/update_order` endpoint, it would extract the JSON data from the POST body and update the `Order` record in the database table that matches the `order_id` in the input data.
 
 ```bash
-curl
+curl http://localhost:8080/update_order -X POST -d @update_order.json
 ```
 
-When the microservice receives a GET request to the `/delete_order` endpoint, it would delete the row in the `orders` table that matches the `order_id` GET parameter.
+When the microservice receives a GET request to the `/delete_order` endpoint, it would delete the row in the `orders` table that matches the `id` GET parameter.
 
 ```bash
-curl http://localhost:8080/delete_order?order_id=2
+curl http://localhost:8080/delete_order?id=2
 ```
 
 That's it. Feel free to fork this project and use it as a template for your own lightweight microservices!
