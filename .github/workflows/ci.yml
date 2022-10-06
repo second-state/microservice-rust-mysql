@@ -1,0 +1,73 @@
+name: ci
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'info'
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Install apt-get packages
+      run: |
+        sudo ACCEPT_EULA=Y apt-get update
+        sudo ACCEPT_EULA=Y apt-get upgrade
+        sudo apt-get install wget git curl software-properties-common build-essential
+
+    - name: Install and run MySQL
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install mysql-server libmysqlclient-dev curl
+        sudo service mysql start
+        mysql -e "SET GLOBAL max_allowed_packet = 36700160;" -uroot -proot
+        mysql -e "SET @@GLOBAL.ENFORCE_GTID_CONSISTENCY = WARN;" -uroot -proot
+        mysql -e "SET @@GLOBAL.ENFORCE_GTID_CONSISTENCY = ON;" -uroot -proot
+        mysql -e "SET @@GLOBAL.GTID_MODE = OFF_PERMISSIVE;" -uroot -proot
+        mysql -e "SET @@GLOBAL.GTID_MODE = ON_PERMISSIVE;" -uroot -proot
+        mysql -e "SET @@GLOBAL.GTID_MODE = ON;" -uroot -proot
+        mysql -e "PURGE BINARY LOGS BEFORE now();" -uroot -proot
+    
+    - name: Install and run TiDB
+      run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh | sh
+        source ~/.profile
+        tiup playground $(DB_VERSION) --db 1 --pd 1 --kv 1 &
+        while ! nc -W 1 localhost 4000 | grep -q -P '.+'; do sleep 1; done
+    
+    - name: Install Rust target for wasm
+      run: |
+        rustup target add wasm32-wasi
+
+    - name: Install WasmEdge
+      run: |
+        VERSION=0.11.1
+        curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/install.sh | sudo bash -s -- --version=$VERSION -p /usr/local
+
+    - name: Run the microservice
+      run: |
+        cargo build --target wasm32-wasi --release
+        wasmedgec target/wasm32-wasi/release/order_demo_service.wasm order_demo_service.wasm
+        nohup wasmedge --env "DATABASE_URL=mysql://root:root@127.0.0.1:3306/mysql" order_demo_service.wasm &
+        echo $! > wasmedge.pid
+        sleep 15
+        
+    - name: Test the service
+      run: |
+        curl http://localhost:8080/init
+        curl http://localhost:8080/create_orders -X POST -d @orders.json
+        curl http://localhost:8080/orders
+        curl http://localhost:8080/delete_order?order_id=2
+        curl http://localhost:8080/orders
+        kill -9 `cat wasmedge.pid`

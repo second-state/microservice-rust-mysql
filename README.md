@@ -43,19 +43,20 @@ Open another terminal, and you can use the `curl` command to interact with the w
 When the microservice receives a GET request to the `/init` endpoint, it would initialize the database with the `orders` table.
 
 ```bash
-curl
+curl http://localhost:8080/init
 ```
 
 When the microservice receives a POST request to the `/create_order` endpoint, it would extract the JSON data from the POST body and insert an `Order` record into the database table.
+For multiple records, use the `/create_orders` endpoint and POST a JSON array of `Order` objects.
 
 ```bash
-curl
+curl http://localhost:8080/create_orders -X POST -d @orders.json
 ```
 
 When the microservice receives a GET request to the `/orders` endpoint, it would get all rows from the `orders` table and return the result set in a JSON array in the HTTP response.
 
 ```bash
-curl
+curl http://localhost:8080/orders
 ```
 
 When the microservice receives a POST request to the `/update_order` endpoint, it would extract the JSON data from the POST body and update the `Order` record in the database table that matches the `order_id` in the input data.
@@ -67,7 +68,7 @@ curl
 When the microservice receives a GET request to the `/delete_order` endpoint, it would delete the row in the `orders` table that matches the `order_id` GET parameter.
 
 ```bash
-curl
+curl http://localhost:8080/delete_order?order_id=2
 ```
 
 That's it. Feel free to fork this project and use it as a template for your own lightweight microservices!
