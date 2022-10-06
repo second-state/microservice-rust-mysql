@@ -91,7 +91,7 @@ jobs:
 
     - name: Run the microservice on TiDB
       run: |
-        nohup wasmedge --env "DATABASE_URL=root@127.0.0.1:4000/mysql" order_demo_service.wasm &
+        nohup wasmedge --env "DATABASE_URL=mysql://root@127.0.0.1:4000/mysql" order_demo_service.wasm &
         echo $! > wasmedge.pid
         sleep 15
 
