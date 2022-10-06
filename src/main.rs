@@ -122,6 +122,29 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
             Ok(Response::new(Body::from("{\"status\":true}")))
         }
 
+        (&Method::POST, "/update_order") => {
+            let mut conn = pool.get_conn().await.unwrap();
+
+            let byte_stream = hyper::body::to_bytes(req).await?;
+            let order: Order = serde_json::from_slice(&byte_stream).unwrap();
+
+            "UPDATE orders SET product_id=:product_id, quantity=:quantity, amount=:amount, shipping=:shipping, tax=:tax, shipping_address=:shipping_address WHERE order_id=:order_id"
+                .with(params! {
+                    "product_id" => order.product_id,
+                    "quantity" => order.quantity,
+                    "amount" => order.amount,
+                    "shipping" => order.shipping,
+                    "tax" => order.tax,
+                    "shipping_address" => &order.shipping_address,
+                    "order_id" => order.order_id,
+                })
+                .ignore(&mut conn)
+                .await?;
+
+            drop(conn);
+            Ok(Response::new(Body::from("{\"status\":true}")))
+        }
+
         (&Method::GET, "/orders") => {
             let mut conn = pool.get_conn().await.unwrap();
 
@@ -144,19 +167,18 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
         }
 
         (&Method::GET, "/delete_order") => {
-            dbg!("delete_order handler");
             let mut conn = pool.get_conn().await.unwrap();
 
-            let params: HashMap<String, String> = url::Url::parse(&req.uri().to_string()).unwrap().query_pairs().into_owned().collect();
+            let params: HashMap<String, String> = req.uri().query().map(|v| {
+                url::form_urlencoded::parse(v.as_bytes()).into_owned().collect()
+            }).unwrap_or_else(HashMap::new);
             let order_id = params.get("id");
-            dbg!("id is {}", order_id);
 
             "DELETE FROM orders WHERE order_id=:order_id"
                 .with(params! { "order_id" => order_id, })
                 .ignore(&mut conn)
                 .await?;
 
-            dbg!("DELETED");
             drop(conn);
             Ok(Response::new(Body::from("{\"status\":true}")))
         }
