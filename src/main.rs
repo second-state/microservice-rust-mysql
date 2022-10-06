@@ -144,16 +144,19 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
         }
 
         (&Method::GET, "/delete_order") => {
+            dbg!("delete_order handler");
             let mut conn = pool.get_conn().await.unwrap();
 
             let params: HashMap<String, String> = url::Url::parse(&req.uri().to_string()).unwrap().query_pairs().into_owned().collect();
             let order_id = params.get("id");
+            dbg!("id is {}", id);
 
-            "DELETE FROM orders WHERE order_id=:order_id;"
+            "DELETE FROM orders WHERE order_id=:order_id"
                 .with(params! { "order_id" => order_id, })
                 .ignore(&mut conn)
                 .await?;
 
+            dbg!("DELETED");
             drop(conn);
             Ok(Response::new(Body::from("{\"status\":true}")))
         }
