@@ -149,7 +149,7 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
 
             let params: HashMap<String, String> = url::Url::parse(&req.uri().to_string()).unwrap().query_pairs().into_owned().collect();
             let order_id = params.get("id");
-            dbg!("id is {}", id);
+            dbg!("id is {}", order_id);
 
             "DELETE FROM orders WHERE order_id=:order_id"
                 .with(params! { "order_id" => order_id, })
