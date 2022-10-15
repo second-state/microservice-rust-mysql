@@ -75,3 +75,28 @@ curl http://localhost:8080/delete_order?id=2
 
 That's it. Feel free to fork this project and use it as a template for your own lightweight microservices!
 
+## Test with Docker
+
+Using a version of Docker with Wasm WASI support, start the example stack using `docker compose`:
+
+```bash
+docker compose up
+```
+
+Initialize the database using the `/init` endpoint:
+
+```bash
+docker run --rm --network host curlimages/curl curl http://localhost:8080/init
+```
+
+List the current orders using the `/orders` endpoint:
+
+```bash
+docker run --rm --network host curlimages/curl curl http://localhost:8080/orders
+```
+
+Add the example orders:
+
+```bash
+cat orders.json | docker run --rm --network host -i curlimages/curl curl http://localhost:8080/create_orders -X POST -d @-
+```
