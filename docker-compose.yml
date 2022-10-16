@@ -1,0 +1,20 @@
+services:
+  server:
+    image: server
+    build:
+      context: .
+      platforms:
+        - wasi/wasm32
+    ports:
+      - 8080:8080
+    network_mode: host
+    environment:
+      DATABASE_URL: mysql://root:whalehello@localhost:3306/mysql
+      RUST_BACKTRACE: full
+    restart: unless-stopped
+    runtime: io.containerd.wasmedge.v1
+  db:
+    image: mariadb:10.9
+    environment:
+      MYSQL_ROOT_PASSWORD: whalehello
+    network_mode: host
