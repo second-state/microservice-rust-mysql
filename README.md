@@ -4,6 +4,8 @@ In this repo, we demonstrate a microservice written in Rust, and connected to a 
 
 > Everything described in this document is captured in the [GitHub Actions CI workflow](.github/workflows/ci.yml).
 
+With seamless Docker integration, you can now build and deploy the entire microservice application and its associated database with a single line of command. There is no need to install any additional software. Checkout **[Quickstart with Docker](README-Docker.md)**.
+
 ## Prerequisites
 
 * Install WasmEdge
@@ -38,7 +40,7 @@ You can use the `wasmedge` command to run the `wasm` application. It will start 
 wasmedge --env "DATABASE_URL=mysql://user:passwd@127.0.0.1:3306/mysql" order_demo_service.wasm
 ```
 
-## Test
+## CRUD tests
 
 Open another terminal, and you can use the `curl` command to interact with the web service.
 
@@ -74,29 +76,3 @@ curl http://localhost:8080/delete_order?id=2
 ```
 
 That's it. Feel free to fork this project and use it as a template for your own lightweight microservices!
-
-## Test with Docker
-
-Using a version of Docker with Wasm WASI support, start the example stack using `docker compose`:
-
-```bash
-docker compose up
-```
-
-Initialize the database using the `/init` endpoint:
-
-```bash
-docker run --rm --network host curlimages/curl curl http://localhost:8080/init
-```
-
-List the current orders using the `/orders` endpoint:
-
-```bash
-docker run --rm --network host curlimages/curl curl http://localhost:8080/orders
-```
-
-Add the example orders:
-
-```bash
-cat orders.json | docker run --rm --network host -i curlimages/curl curl http://localhost:8080/create_orders -X POST -d @-
-```
