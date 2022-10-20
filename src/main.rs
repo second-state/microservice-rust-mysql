@@ -66,12 +66,20 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
         // Simply echo the body back to the client.
         (&Method::POST, "/echo") => Ok(Response::new(req.into_body())),
 
+        // CORS OPTIONS
+        (&Method::OPTIONS, "/init") => Ok(response_build(&String::from(""))),
+        (&Method::OPTIONS, "/create_order") => Ok(response_build(&String::from(""))),
+        (&Method::OPTIONS, "/create_orders") => Ok(response_build(&String::from(""))),
+        (&Method::OPTIONS, "/update_order") => Ok(response_build(&String::from(""))),
+        (&Method::OPTIONS, "/delete_order") => Ok(response_build(&String::from(""))),
+        (&Method::OPTIONS, "/orders") => Ok(response_build(&String::from(""))),
+        
         (&Method::GET, "/init") => {
             let mut conn = pool.get_conn().await.unwrap();
             "DROP TABLE IF EXISTS orders;".ignore(&mut conn).await?;
             "CREATE TABLE orders (order_id INT, product_id INT, quantity INT, amount FLOAT, shipping FLOAT, tax FLOAT, shipping_address VARCHAR(20));".ignore(&mut conn).await?;
             drop(conn);
-            Ok(Response::new(Body::from("{\"status\":true}")))
+            Ok(response_build("{\"status\":true}"))
         }
 
         (&Method::POST, "/create_order") => {
@@ -94,7 +102,8 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
                 .await?;
 
             drop(conn);
-            Ok(Response::new(Body::from("{\"status\":true}")))
+            Ok(response_build("{\"status\":true}"))
+            // Ok(Response::new(Body::from("{\"status\":true}")))
         }
 
         (&Method::POST, "/create_orders") => {
@@ -119,7 +128,8 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
                 .await?;
 
             drop(conn);
-            Ok(Response::new(Body::from("{\"status\":true}")))
+            Ok(response_build("{\"status\":true}"))
+            // Ok(Response::new(Body::from("{\"status\":true}")))
         }
 
         (&Method::POST, "/update_order") => {
@@ -142,7 +152,8 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
                 .await?;
 
             drop(conn);
-            Ok(Response::new(Body::from("{\"status\":true}")))
+            Ok(response_build("{\"status\":true}"))
+            // Ok(Response::new(Body::from("{\"status\":true}")))
         }
 
         (&Method::GET, "/orders") => {
@@ -163,9 +174,10 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
                 ).await?;
 
             drop(conn);
-            Ok(Response::new(Body::from(serde_json::to_string(&orders)?)))
-        }
-
+            Ok(response_build(serde_json::to_string(&orders)?.as_str()))
+            // Ok(Response::new(Body::from(serde_json::to_string(&orders)?)))
+        }        
+        
         (&Method::GET, "/delete_order") => {
             let mut conn = pool.get_conn().await.unwrap();
 
@@ -180,7 +192,8 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
                 .await?;
 
             drop(conn);
-            Ok(Response::new(Body::from("{\"status\":true}")))
+            Ok(response_build("{\"status\":true}"))
+            // Ok(Response::new(Body::from("{\"status\":true}")))
         }
 
         // Return the 404 Not Found for other routes.
@@ -190,6 +203,16 @@ async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>
             Ok(not_found)
         }
     }
+}
+
+// CORS headers
+fn response_build(body: &str) -> Response<Body> {
+    Response::builder()
+        .header("Access-Control-Allow-Origin", "*")
+        .header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        .header("Access-Control-Allow-Headers", "api,Keep-Alive,User-Agent,Content-Type")
+        .body(Body::from(body.to_owned()))
+        .unwrap()
 }
 
 #[tokio::main(flavor = "current_thread")]
