@@ -83,20 +83,5 @@ Using a version of Docker with Wasm WASI support, start the example stack using 
 docker compose up
 ```
 
-Initialize the database using the `/init` endpoint:
-
-```bash
-docker run --rm --network host curlimages/curl curl http://localhost:8080/init
-```
-
-List the current orders using the `/orders` endpoint:
-
-```bash
-docker run --rm --network host curlimages/curl curl http://localhost:8080/orders
-```
-
-Add the example orders:
-
-```bash
-cat orders.json | docker run --rm --network host -i curlimages/curl curl http://localhost:8080/create_orders -X POST -d @-
-```
+This will build and run the Rust Wasm server and startup a MySQL backing database.
+You can then follow the steps above to interact with the Web server.
