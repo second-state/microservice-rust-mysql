@@ -4,16 +4,36 @@ In this repo, we demonstrate a microservice written in Rust, and connected to a 
 
 > Everything described in this document is captured in the [GitHub Actions CI workflow](.github/workflows/ci.yml).
 
-## Prerequisites
+## Quickstart with Docker
 
-* Install WasmEdge
-* Install Rust
-* Install and start MySQL (or TiDB)
-
-You also need to install the `wasm32-wasi` compiler target to your Rust install.
+The easiest way to get started is to use a version of Docker with Wasm WASI support. You just need to type one command.
 
 ```bash
+docker compose up
+```
+
+This will build the Rust source code, run the Wasm server, and startup a MySQL backing database. See the [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml) files. You can jump directly to the [CRUD tests](#crud-tests) section to interact with the web service.
+
+However, if you want to build and run the microservice app step by step on your own system. Follow the detailed instructions below.
+
+## Prerequisites
+
+* [Install Rust](https://www.rust-lang.org/tools/install).
+* [Install WasmEdge](https://wasmedge.org/book/en/quick_start/install.html).
+* [Install and start the MySQL database](https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/).
+
+On Linux, you can use the following commands to install Rust and WasmEdge.
+
+```bash
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+# Install WebAssembly target for Rust
 rustup target add wasm32-wasi
+
+# Install WasmEdge
+curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/install.sh | bash -s -- -e all
+source $HOME/.wasmedge/env
 ```
 
 ## Build
@@ -38,7 +58,7 @@ You can use the `wasmedge` command to run the `wasm` application. It will start 
 wasmedge --env "DATABASE_URL=mysql://user:passwd@127.0.0.1:3306/mysql" order_demo_service.wasm
 ```
 
-## Test
+## CRUD tests
 
 Open another terminal, and you can use the `curl` command to interact with the web service.
 
@@ -75,13 +95,3 @@ curl http://localhost:8080/delete_order?id=2
 
 That's it. Feel free to fork this project and use it as a template for your own lightweight microservices!
 
-## Test with Docker
-
-Using a version of Docker with Wasm WASI support, start the example stack using `docker compose`:
-
-```bash
-docker compose up
-```
-
-This will build and run the Rust Wasm server and startup a MySQL backing database.
-You can then follow the steps above to interact with the Web server.
