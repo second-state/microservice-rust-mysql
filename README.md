@@ -12,7 +12,7 @@ The easiest way to get started is to use a version of Docker with Wasm WASI supp
 docker compose up
 ```
 
-This will build the Rust source code, run the Wasm server, and startup a MySQL backing database. See the [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml) files. You can jump directly to the [CRUD tests](#crud-tests) section to interact with the web service.
+This will build the Rust source code, run the Wasm server, and startup a MySQL backing database. It also starts a very basic web interface (available at http://localhost:8090). See the [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml) files. You can jump directly to the [CRUD tests](#crud-tests) section to interact with the web service.
 
 However, if you want to build and run the microservice app step by step on your own system. Follow the detailed instructions below.
 
