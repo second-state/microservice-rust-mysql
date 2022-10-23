@@ -14,7 +14,8 @@ EOT
 RUN curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/install.sh | bash
 
 FROM buildbase AS build
-COPY . .
+COPY Cargo.toml orders.json update_order.json .
+COPY src ./src 
 # Build the Wasm binary
 RUN --mount=type=cache,target=/usr/local/cargo/git/db \
     --mount=type=cache,target=/usr/local/cargo/registry/cache \
