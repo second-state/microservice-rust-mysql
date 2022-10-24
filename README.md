@@ -6,13 +6,13 @@ In this repo, we demonstrate a microservice written in Rust, and connected to a 
 
 ## Quickstart with Docker
 
-The easiest way to get started is to use a version of Docker with Wasm WASI support. You just need to type one command.
+The easiest way to get started is to use a version of [Docker Desktop](https://github.com/chris-crone/wasm-day-na-22#prerequisites) or [Docker Engine](https://github.com/chris-crone/wasm-day-na-22/tree/main/server) with Wasm WASI support. You just need to type one command.
 
 ```bash
 docker compose up
 ```
 
-This will build the Rust source code, run the Wasm server, and startup a MySQL backing database. It also starts a very basic web interface (available at http://localhost:8090). See the [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml) files. You can jump directly to the [CRUD tests](#crud-tests) section to interact with the web service.
+This will build the Rust source code, run the Wasm server, and startup a MySQL backing database. It also starts a basic STATIC web interface (available at http://localhost:8090). See the [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml) files. You can jump directly to the [CRUD tests](#crud-tests) section to interact with the web service.
 
 However, if you want to build and run the microservice app step by step on your own system. Follow the detailed instructions below.
 
