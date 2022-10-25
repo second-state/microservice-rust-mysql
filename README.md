@@ -1,6 +1,6 @@
 # Lightweight and secure microservice with a database backend
 
-In this repo, we demonstrate a microservice written in Rust, and connected to a MySQL database. It supports CURD operations on a database table via a HTTP service interface. The microservice is compiled into WebAssembly and runs in the WasmEdge Runtime, which is a secure and lightweight alternative to natively compiled Rust apps in Linux containers. The WasmEdge Runtime can be managed and orchestrated by container tools such as the Docker CLI, Podman, as well as almost all flavors of Kubernetes. It also works with microservice management frameworks such as Dapr.
+In this repo, we demonstrate a microservice written in Rust, and connected to a MySQL database. It supports CURD operations on a database table via a HTTP service interface. The microservice is compiled into WebAssembly and runs in the WasmEdge Runtime, which is a secure and lightweight alternative to natively compiled Rust apps in Linux containers. The WasmEdge Runtime can be managed and orchestrated by container tools such as the Docker CLI, Podman, as well as almost all flavors of Kubernetes. It also works with microservice management frameworks such as Dapr. [Checkout this article](https://blog.logrocket.com/rust-microservices-server-side-webassembly/) to learn how the Rust code in this microservice works.
 
 > Everything described in this document is captured in the [GitHub Actions CI workflow](.github/workflows/ci.yml).
 
