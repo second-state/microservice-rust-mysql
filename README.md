@@ -1,10 +1,15 @@
-# Lightweight and secure microservice with a database backend
+# Secure & lightweight microservice with a database backend
 
-In this repo, we demonstrate a microservice written in Rust, and connected to a MySQL database. It supports CURD operations on a database table via a HTTP service interface. The microservice is compiled into WebAssembly and runs in the WasmEdge Runtime, which is a secure and lightweight alternative to natively compiled Rust apps in Linux containers. The WasmEdge Runtime can be managed and orchestrated by container tools such as the Docker CLI, Podman, as well as almost all flavors of Kubernetes. It also works with microservice management frameworks such as Dapr. Checkout [this article](https://blog.logrocket.com/rust-microservices-server-side-webassembly/) or [this video](https://www.youtube.com/watch?v=VSqMPFr7SEs) to learn how the Rust code in this microservice works.
+In this repo, we demonstrate a microservice written in Rust, and connected to a MySQL database. It supports CURD operations on a database table via a HTTP service interface. The microservice is compiled into WebAssembly (Wasm) and runs in the WasmEdge Runtime, which is a secure and lightweight alternative to natively compiled Rust apps in Linux containers. The WasmEdge Runtime can be managed and orchestrated by container tools such as the Docker, Podman, as well as almost all flavors of Kubernetes. It also works with microservice management frameworks such as Dapr. Checkout [this article](https://blog.logrocket.com/rust-microservices-server-side-webassembly/) or [this video](https://www.youtube.com/watch?v=VSqMPFr7SEs) to learn how the Rust code in this microservice works.
 
 ## Quickstart with Docker
 
-The easiest way to get started is to use a version of [Docker Desktop](https://github.com/chris-crone/wasm-day-na-22#prerequisites) or [Docker Engine](https://github.com/chris-crone/wasm-day-na-22/tree/main/server) with Wasm WASI support. You just need to type one command.
+The easiest way to get started is to use a version of Docker Desktop or Docker CLI with Wasm support.
+
+* [Install Docker Desktop + Wasm (Beta)](https://docs.docker.com/desktop/wasm/)
+* [Install Docker CLI + Wasm](https://github.com/chris-crone/wasm-day-na-22/tree/main/server)
+
+Then, you just need to type one command.
 
 ```bash
 docker compose up
