@@ -6,7 +6,7 @@ services:
     volumes:
       - ./client:/usr/share/nginx/html
   server:
-    image: server
+    image: demo-microservice
     build:
       context: .
       platforms:
