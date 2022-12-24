@@ -7,7 +7,7 @@ services:
       - ./client:/usr/share/nginx/html
   server:
     image: demo-microservice
-    platform: wasi/wasm32
+    platform: wasi/wasm
     build:
       context: .
     ports:
