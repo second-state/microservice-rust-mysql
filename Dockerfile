@@ -17,10 +17,7 @@ FROM buildbase AS build
 COPY Cargo.toml orders.json update_order.json .
 COPY src ./src 
 # Build the Wasm binary
-RUN --mount=type=cache,target=/usr/local/cargo/git/db \
-    --mount=type=cache,target=/usr/local/cargo/registry/cache \
-    --mount=type=cache,target=/usr/local/cargo/registry/index \
-    cargo build --target wasm32-wasi --release
+RUN cargo build --target wasm32-wasi --release
 # This line builds the AOT Wasm binary
 RUN /root/.wasmedge/bin/wasmedgec target/wasm32-wasi/release/order_demo_service.wasm order_demo_service.wasm
 

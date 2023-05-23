@@ -12,6 +12,7 @@ The easiest way to get started is to use a version of Docker Desktop or Docker C
 Then, you just need to type one command.
 
 ```bash
+export BUILDX_NO_DEFAULT_ATTESTATIONS=1
 docker compose up
 ```
 
