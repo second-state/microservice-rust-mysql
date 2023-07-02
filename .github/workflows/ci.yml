@@ -52,7 +52,7 @@ jobs:
 
     - name: Install WasmEdge
       run: |
-        VERSION=0.12.1
+        VERSION=0.13.0
         curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/install.sh | sudo bash -s -- --version=$VERSION -p /usr/local
 
     - name: Run the microservice on MySQL
