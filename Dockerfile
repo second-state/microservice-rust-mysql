@@ -20,7 +20,8 @@ COPY src ./src
 RUN cargo build --target wasm32-wasi --release
 # This line builds the AOT Wasm binary
 RUN /root/.wasmedge/bin/wasmedgec target/wasm32-wasi/release/order_demo_service.wasm order_demo_service.wasm
+RUN chmod a+x order_demo_service.wasm
 
 FROM scratch
-ENTRYPOINT [ "order_demo_service.wasm" ]
+ENTRYPOINT [ "/order_demo_service.wasm" ]
 COPY --link --from=build /src/order_demo_service.wasm /order_demo_service.wasm
