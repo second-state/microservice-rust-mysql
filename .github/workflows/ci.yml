@@ -22,6 +22,7 @@ jobs:
       
     - name: Install apt-get packages
       run: |
+        echo RESET grub-efi/install_devices | debconf-communicate grub-pc
         sudo ACCEPT_EULA=Y apt-get update
         sudo ACCEPT_EULA=Y apt-get upgrade
         sudo apt-get install wget git curl software-properties-common build-essential
