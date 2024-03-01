@@ -1,19 +1,19 @@
-[submodule "h2"]
+[submodule "./local_deps/h2"]
     path = ./local_deps/h2
     url =  https://github.com/aalonsolopez/h2
     branch = version-adjustment
 
-[submodule "hyper"]
+[submodule "./local_deps/hyper"]
     path = ./local_deps/hyper
     url = https://github.com/aalonsolopez/hyper
     branch = version-adjustment
 
-[submodule "tokio"]
+[submodule "./local_deps/tokio"]
     path = ./local_deps/tokio
     url = https://github.com/aalonsolopez/tokio
     branch = version-adjustment
 
-[submodule "mysql_async_wasi"]
+[submodule "./local_deps/mysql_async_wasi"]
     path = ./local_deps/mysql_async_wasi
     url = https://github.com/aalonsolopez/mysql_async_wasi
     branch = version-adjustment
