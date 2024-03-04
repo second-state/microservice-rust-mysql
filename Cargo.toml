@@ -17,3 +17,4 @@ tokio-util_wasi = { path = "./local_deps/tokio/tokio-util" }
 h2_wasi = { path = "./local_deps/h2" }
 hyper_wasi = { path = "./local_deps/hyper" }
 mysql_async_wasi = { path = "./local_deps/mysql_async_wasi" }
+tokio_wasi = { path = "./local_deps/tokio/tokio" }
