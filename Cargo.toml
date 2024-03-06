@@ -8,12 +8,6 @@ anyhow = "1.0"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 url = "2.3"
-mysql_async_wasi = "0.31"
-hyper_wasi = { path = "./local_deps/hyper", features = ["full"] }
-tokio_wasi = { path = "./local_deps/tokio/tokio", features = ["full"] }
-
-[patch.crates-io]
-tokio-util_wasi = { path = "./local_deps/tokio/tokio-util" }
-h2_wasi = { path = "./local_deps/h2" }
-hyper_wasi = { path = "./local_deps/hyper" }
-tokio_wasi = { path = "./local_deps/tokio/tokio" }
+mysql_async_wasi = "=0.31.5"
+hyper_wasi = { version = "0.15", features = ["full"] }
+tokio_wasi = { version = "1", features = ["io-util", "fs", "net", "time", "rt", "macros"] }
