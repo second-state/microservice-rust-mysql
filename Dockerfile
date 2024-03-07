@@ -8,7 +8,7 @@ RUN <<EOT bash
 EOT
 
 FROM buildbase AS build
-COPY Cargo.toml orders.json update_order.json .
+COPY Cargo.toml orders.json update_order.json ./
 COPY src ./src
 # Build the Wasm binary
 RUN cargo build --target wasm32-wasi --release
