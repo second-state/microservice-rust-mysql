@@ -225,6 +225,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let pool = Pool::new(builder.pool_opts(pool_opts));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
+    let tcp_listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     let make_svc = make_service_fn(|_| {
         let pool = pool.clone();
         async move {
@@ -234,7 +235,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
             }))
         }
     });
-    let server = Server::bind(&addr).serve(make_svc);
+    let server = Server::from_tcp(tcp_listener.into_std().unwrap()).unwrap().serve(make_svc);
     if let Err(e) = server.await {
         eprintln!("server error: {}", e);
     }
