@@ -2,6 +2,11 @@
 
 FROM --platform=$BUILDPLATFORM rust:1.71 AS buildbase
 WORKDIR /src
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    clang \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN <<EOT bash
     set -ex
     rustup target add wasm32-wasi
@@ -10,6 +15,7 @@ EOT
 FROM buildbase AS build
 COPY Cargo.toml orders.json update_order.json ./
 COPY src ./src
+COPY .cargo ./.cargo
 # Build the Wasm binary
 RUN cargo build --target wasm32-wasi --release
 # This line builds the AOT Wasm binary
