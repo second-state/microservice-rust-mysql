@@ -4,7 +4,7 @@ pub use mysql_async::prelude::*;
 pub use mysql_async::*;
 use std::convert::Infallible;
 use std::net::SocketAddr;
-use std::result::Result;
+use std::result::Result as StdResult;
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
@@ -57,7 +57,7 @@ impl Order {
     }
 }
 
-async fn handle_request(req: Request<Body>, pool: Pool) -> Result<Response<Body>, anyhow::Error> {
+async fn handle_request(req: Request<Body>, pool: Pool) -> StdResult<Response<Body>, anyhow::Error> {
     match (req.method(), req.uri().path()) {
         (&Method::GET, "/") => Ok(Response::new(Body::from(
             "The valid endpoints are /init /create_order /create_orders /update_order /orders /delete_order",
@@ -216,7 +216,7 @@ fn response_build(body: &str) -> Response<Body> {
 }
 
 #[tokio::main(flavor = "current_thread")]
-async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+async fn main() -> StdResult<(), Box<dyn std::error::Error + Send + Sync>> {
     let opts = Opts::from_url(&*get_url()).unwrap();
     let builder = OptsBuilder::from_opts(opts);
     // The connection pool will have a min of 5 and max of 10 connections.
