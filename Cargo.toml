@@ -15,6 +15,6 @@ serde = { version = "1.0", features = ["derive"] }
 url = "2.3"
 
 mysql_async = { version = "0.34", default-features=false, features = [ "default-rustls" ], git="https://github.com/blackbeam/mysql_async.git", rev="08b7b70" }
-zstd-sys = "=2.0.9"
+# zstd-sys = "=2.0.9"
 hyper = { version = "0.14", features = ["full"] }
 tokio = { version = "1", features = ["io-util", "fs", "net", "time", "rt", "macros"] }
