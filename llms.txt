@@ -1,0 +1,14 @@
+A template project for building a database-driven microservice in Rust and run it in the WasmEdge sandbox.
+
+The Cargo.toml file is for building the Rust cargo project for the HTTP server.
+
+The src/main.rs file contains Rust source code for the HTTP services written in the Rust hyper and mysql_async crates. It connects to the MySQL database running at the DATABASE_URL.
+
+The client/index.html file contains the UI to interact with the HTTP services.
+
+The orders.json and update_order.json files contain test data for the HTTP service.
+
+The Dockerfile allows developers to deploy the Rust HTTP server in a Docker container.
+
+The docker-compose.yml file can start both the Rust HTTP server and a MySQL database in a single command.
+
