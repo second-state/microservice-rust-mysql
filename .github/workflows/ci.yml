@@ -59,7 +59,7 @@ jobs:
     - name: Run the microservice on MySQL
       run: |
         cargo build --target wasm32-wasip1 --release
-        wasmedge compile target/wasm32-wasi/release/order_demo_service.wasm order_demo_service.wasm
+        wasmedge compile target/wasm32-wasip1/release/order_demo_service.wasm order_demo_service.wasm
         nohup wasmedge --env "DATABASE_URL=mysql://root:root@127.0.0.1:3306/mysql" order_demo_service.wasm &
         echo $! > wasmedge.pid
         sleep 15
